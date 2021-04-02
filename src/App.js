@@ -87,7 +87,7 @@ function App() {
           <div className="heading-extra">{user.email}</div>
         </div>
         {user.token &&
-          <button onClick={() => { localStorage.removeItem("user"); setUser({}) }}>Logout</button>}
+          <button onClick={() => { localStorage.removeItem("user"); setUser({}); setPage("login") }}>Logout</button>}
       </header>
       <div>
         {(page === "login") &&
