@@ -39,7 +39,6 @@ function App() {
     museer = JSON.parse(museer);
 
     if (museer) {
-
       setPage("events");
       setUser(museer);
     }
@@ -53,7 +52,8 @@ function App() {
         console.log(json);
         setCategories(json);
       });
-  }, [])
+  }, []);
+
   useEffect(() => {
     if (user.token) {
       fetch(backendURI + "user-event-details", {
@@ -71,12 +71,20 @@ function App() {
           setuserEvents(json);
         });
     }
-  }, [user.token])
+  }, [user.token]);
+
   return (
     <div className="App">
       <header className="App-header">
-        <h4>Ragam Admin</h4>
-        {user.token && <button onClick={() => { localStorage.removeItem("user"); setUser({}) }}>Logout</button>}
+        <div className="App-header-left">
+          {(page === "login") && <h4 className="page-heading">Login</h4>}
+          {(page === "events") && <h4 className="page-heading">Events</h4>}
+          {(page === "insideevent") && <h4 className="page-heading">Event Details</h4>}
+          <div className="App-header-user">{user.email}</div>
+
+        </div>
+        {user.token &&
+          <button onClick={() => { localStorage.removeItem("user"); setUser({}) }}>Logout</button>}
       </header>
       <div>
         {(page === "login") &&
@@ -129,55 +137,56 @@ function App() {
           }} />
           <button onClick={() => { setPage("login") }}>Login</button>
         </div>}
-        {(user.token && page === "events") && <div>
-          <h4> Logged in as {user.email}</h4>
-          <div className="events-page">
-            <h4 className="page-heading">Events</h4>
-            {categories.length &&
-              <div className="events-list">
-                {getEvents(categories).map((val, idx) => {
-                  return <div key={val.name} className="events-list-item" onClick={() => { setcurrevent(val.id); setPage("insideevent"); console.log("eventId", val.id) }}>
-                    {val.name}
-                  </div>
+        {(user.token && page === "events") &&
+          <div>
+            {/* <h4> Logged in as {user.email}</h4> */}
+            <div className="events-page">
+              {/* <h4 className="page-heading">Events</h4> */}
+              {categories.length &&
+                <div className="events-list">
+                  {getEvents(categories).map((val, idx) => {
+                    return <div key={val.name} className="events-list-item" onClick={() => { setcurrevent(val.id); setPage("insideevent"); console.log("eventId", val.id) }}>
+                      {val.name}
+                    </div>
+                  })}
+                </div>}
+            </div>
+          </div>}
+        {(user.token && page === "insideevent") &&
+          <div >
+            <button style={{ marginTop: "15px" }} onClick={() => { setPage("events") }}>Back to events</button>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+              <div style={{ height: "100vh", overflowY: "scroll" }} ><h4>Registrations</h4>
+                {<h4>Total Registrations:{getTotalreg(userEvents, currevent)} </h4>}
+                {userEvents.map((val, idx) => {
+                  if (val.event === currevent && val.teamMembers.length)
+                    return (<div key={val.id} style={{ border: "1px solid black", padding: "5px" }}>
+                      <h4> Status</h4>
+                      {val.status}
+                      <h4>teamMembers</h4>
+                      {val.teamMembers.map((val1, idx1) => { return (<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap", marginTop: "10px" }}><h5 className="nomargin">{val1.name}</h5><h5 className="nomargin">{val1.collegeName}</h5><h5 className="nomargin">{val1.ragamID}</h5><h5 className="nomargin">{val1.phoneNumber}</h5></div>) })}
+                      <h4>Metavalues</h4>
+                      {val.metaValues?.map((val2, idx) => {
+                        return (<div>
+                          {val2}
+                        </div>)
+                      })}
+                      <h4>Submissions</h4>
+                      { val.submissions.length ? val.submissions.map((val, idx) => {
+                        return (
+                          <a style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                          }} href={backendURI.slice(0, -1) + val.url}>
+                            <h4>{val.name}</h4>
+                          </a>
+                        )
+                      }) : <h4>No submissions by this team</h4>}
+                    </div>)
                 })}
-
-              </div>}
-          </div>
-        </div>}
-        {(user.token && page === "insideevent") && <div >
-          <button style={{ marginTop: "15px" }} onClick={() => { setPage("events") }}>Back to events</button>
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-            <div style={{ height: "100vh", overflowY: "scroll" }} ><h4>Registrations</h4>
-              {<h4>Total Registrations:{getTotalreg(userEvents, currevent)} </h4>}
-              {userEvents.map((val, idx) => {
-                if (val.event === currevent && val.teamMembers.length)
-                  return (<div key={val.id} style={{ border: "1px solid black", padding: "5px" }}>
-                    <h4> Status</h4>
-                    {val.status}
-                    <h4>teamMembers</h4>
-                    {val.teamMembers.map((val1, idx1) => { return (<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap", marginTop: "10px" }}><h5 className="nomargin">{val1.name}</h5><h5 className="nomargin">{val1.collegeName}</h5><h5 className="nomargin">{val1.ragamID}</h5><h5 className="nomargin">{val1.phoneNumber}</h5></div>) })}
-                    <h4>Metavalues</h4>
-                    {val.metaValues?.map((val2, idx) => {
-                      return (<div>
-                        {val2}
-                      </div>)
-                    })}
-                    <h4>Submissions</h4>
-                    { val.submissions.length ? val.submissions.map((val, idx) => {
-                      return (
-                        <a style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis"
-                        }} href={backendURI.slice(0, -1) + val.url}>
-                          <h4>{val.name}</h4>
-                        </a>
-                      )
-                    }) : <h4>No submissions by this team</h4>}
-                  </div>)
-              })}
+              </div>
             </div>
           </div>
-        </div>
         }
       </div>
     </div>
