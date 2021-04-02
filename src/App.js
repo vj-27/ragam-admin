@@ -18,6 +18,8 @@ function getEventName(events, id) {
 function getTotalreg(uevents, curevent) {
   let a = 0;
   for (let i in uevents) {
+    if (uevents[i].id === "1422")
+      console.log(curevent, uevents[i])
     if (uevents[i].event === curevent && uevents[i].teamMembers.length)
       a = a + 1;
   }
@@ -60,7 +62,7 @@ function App() {
 
   useEffect(() => {
     if (user.token) {
-      fetch(backendURI + "user-event-details", {
+      fetch(backendURI + "user-event-details?_limit=999999", {
         method: "GET",
         headers: {
           Authorization: "Bearer " + user.token,
@@ -156,7 +158,7 @@ function App() {
             </div>
           </div>}
         {(user.token && page === "insideevent") &&
-          <div class="event-details-page">
+          <div className="event-details-page">
             <div style={{ padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <h4 className="page-sub-heading">{getEventName(getEvents(categories), currevent)}</h4>
