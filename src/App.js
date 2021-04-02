@@ -11,6 +11,10 @@ function getEvents(cats) {
   return arr;
 }
 
+function getEventName(events, id) {
+  return events.find((ev) => ev.id === id).name;
+}
+
 function getTotalreg(uevents, curevent) {
   let a = 0;
   for (let i in uevents) {
@@ -80,8 +84,7 @@ function App() {
           {(page === "login") && <h4 className="page-heading">Login</h4>}
           {(page === "events") && <h4 className="page-heading">Events</h4>}
           {(page === "insideevent") && <h4 className="page-heading">Event Details</h4>}
-          <div className="App-header-user">{user.email}</div>
-
+          <div className="heading-extra">{user.email}</div>
         </div>
         {user.token &&
           <button onClick={() => { localStorage.removeItem("user"); setUser({}) }}>Logout</button>}
@@ -153,38 +156,66 @@ function App() {
             </div>
           </div>}
         {(user.token && page === "insideevent") &&
-          <div >
-            <button style={{ marginTop: "15px" }} onClick={() => { setPage("events") }}>Back to events</button>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
-              <div style={{ height: "100vh", overflowY: "scroll" }} ><h4>Registrations</h4>
-                {<h4>Total Registrations:{getTotalreg(userEvents, currevent)} </h4>}
-                {userEvents.map((val, idx) => {
-                  if (val.event === currevent && val.teamMembers.length)
-                    return (<div key={val.id} style={{ border: "1px solid black", padding: "5px" }}>
-                      <h4> Status</h4>
-                      {val.status}
-                      <h4>teamMembers</h4>
-                      {val.teamMembers.map((val1, idx1) => { return (<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap", marginTop: "10px" }}><h5 className="nomargin">{val1.name}</h5><h5 className="nomargin">{val1.collegeName}</h5><h5 className="nomargin">{val1.ragamID}</h5><h5 className="nomargin">{val1.phoneNumber}</h5></div>) })}
-                      <h4>Metavalues</h4>
-                      {val.metaValues?.map((val2, idx) => {
-                        return (<div>
-                          {val2}
-                        </div>)
-                      })}
-                      <h4>Submissions</h4>
-                      { val.submissions.length ? val.submissions.map((val, idx) => {
-                        return (
-                          <a style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis"
-                          }} href={backendURI.slice(0, -1) + val.url}>
-                            <h4>{val.name}</h4>
-                          </a>
-                        )
-                      }) : <h4>No submissions by this team</h4>}
-                    </div>)
-                })}
+          <div class="event-details-page">
+            <div style={{ padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <h4 className="page-sub-heading">{getEventName(getEvents(categories), currevent)}</h4>
+                {<div className="heading-extra">Total Registrations: {getTotalreg(userEvents, currevent)} </div>}
               </div>
+              <button onClick={() => { setPage("events") }}>Back to events</button>
+            </div>
+            <div className="event-reg-list">
+              {userEvents.map((val, idx) => {
+                if (val.event === currevent && val.teamMembers.length)
+                  return (
+                    <div key={val.id} className="event-reg-list-item">
+                      <div class="event-reg-detail">
+                        <label className="event-reg-label">Ref No.</label>
+                        <div>{val.id}</div>
+                      </div>
+                      <div class="event-reg-detail">
+                        <label className="event-reg-label">Status</label>
+                        <div>{val.status}</div>
+                      </div>
+                      <div class="event-reg-detail">
+                        <label className="event-reg-label">Team Members</label>
+                        <div>
+                          {val.teamMembers.map((val1, idx1) => {
+                            return (<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap", marginTop: "10px" }}>
+                              <div style={{ textDecoration: "underline" }}>{val1.ragamID}</div>
+                              <div >{val1.name}</div>
+                              <div >{val1.collegeName}</div>
+                              <div >{val1.phoneNumber}</div>
+                              <div >{val1.email}</div>
+                            </div>)
+                          })}
+                        </div>
+                      </div>
+                      {val.metaValues &&
+                        <div class="event-reg-detail">
+                          <label className="event-reg-label">Metavalues</label>
+                          {val.metaValues?.map((val2, idx) => {
+                            return (<div>
+                              {val2}
+                            </div>)
+                          })}
+                        </div>}
+
+                      <div class="event-reg-detail">
+                        <label className="event-reg-label">Submissions</label>
+                        {val.submissions.length ? val.submissions.map((val, idx) => {
+                          return (
+                            <a style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis"
+                            }} href={backendURI.slice(0, -1) + val.url}>
+                              {val.name}
+                            </a>
+                          )
+                        }) : <div>No submissions by this team</div>}
+                      </div>
+                    </div>)
+              })}
             </div>
           </div>
         }

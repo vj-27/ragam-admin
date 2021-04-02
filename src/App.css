@@ -23,7 +23,12 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  padding: 0.5rem 2rem;
+  padding: 0rem 1rem;
+}
+
+.App-header-left {
+  display: flex;
+  flex-direction: column;
 }
 
 .App-link {
@@ -49,7 +54,7 @@
   margin: 1rem 0;
 }
 
-.App-header-user {
+.heading-extra {
   margin-top: -1.2rem;
   margin-bottom: 1rem;
   font-size: 0.8rem;
@@ -101,4 +106,24 @@
 }
 .events-list > *+* {
   border-top: solid 1px #ccc;
+}
+
+.event-reg-list, .event-reg-list > *+* {
+  border-top: solid 1px #ccc;
+}
+
+.event-reg-list-item {
+  padding: 0.5rem 1rem;
+}
+
+.event-reg-label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.event-reg-detail {
+  display: flex;
+  flex-direction: column;
+  padding: .5rem 0;
 }
