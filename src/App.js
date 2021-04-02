@@ -10,10 +10,11 @@ function getEvents(cats) {
   console.log(arr)
   return arr;
 }
+
 function getTotalreg(uevents, curevent) {
   let a = 0;
   for (let i in uevents) {
-    if (uevents[i].event == curevent && uevents[i].teamMembers.length)
+    if (uevents[i].event === curevent && uevents[i].teamMembers.length)
       a = a + 1;
   }
   return a;
@@ -32,7 +33,6 @@ function App() {
   const [categories, setCategories] = useState({});
   const [userEvents, setuserEvents] = useState([]);
   const [currevent, setcurrevent] = useState("");
-  const [currUserEventId, setcurrUserEventId] = useState("");
 
   useEffect(() => {
     let museer = localStorage.getItem("user");
@@ -79,38 +79,41 @@ function App() {
         {user.token && <button onClick={() => { localStorage.removeItem("user"); setUser({}) }}>Logout</button>}
       </header>
       <div>
-        {(page == "login" ) && <div style={{display:"flex",flexDirection:"column"}}><h4>Login</h4>
-        <div>
-          <label for="email">Email:</label>
-          <input type="text" id="email" name="email" onChange={(e) => { setEmail(e.target.value) }} />
+        {(page === "login") &&
+          <div className="login-page">
+            <h4 className="page-heading">Login</h4>
+            <form className="form" onSubmit={(event) => {
+              event.preventDefault();
+              fetch(backendURI + "auth/local", {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "identifier": email, "password": pass })
+              }).then((res) => { res.json().then(data => { if (data.statusCode) setErr("Username or Password invalid"); else { let user1 = data.user; user1.token = data.jwt; localStorage.setItem("user", JSON.stringify(user1)); setUser(user1); setPage("events") } }) }, (err) => { console.log(err) });
+            }}>
+              <div className="field">
+                <label htmlFor="email">Email:</label>
+                <input type="text" id="email" name="email" onChange={(e) => { setEmail(e.target.value) }} />
+              </div>
+              <div className="field">
+                <label htmlFor="pass">Password:</label>
+                <input type="password" id="pass" name="pass" onChange={(e) => { setPass(e.target.value) }} />
+              </div>
+              {err !== "" && <h4>{err}</h4>}
+              <input type="submit" value="Login" />
+              {/* <button onClick={() => { setPage("register") }}>Register</button> */}
+            </form>
           </div>
-          <div>
-          <label for="pass">Password:</label>
-          <input type="password" id="pass" name="pass" onChange={(e) => { setPass(e.target.value) }} />
-          </div>
-          <h4>{err}</h4>
-          <input type="button" value="Submit" onClick={() => {
-
-            fetch(backendURI + "auth/local", {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ "identifier": email, "password": pass })
-            }).then((res) => { res.json().then(data => { if (data.statusCode) setErr("Username or Password invalid"); else { let user1 = data.user; user1.token = data.jwt; localStorage.setItem("user", JSON.stringify(user1)); setUser(user1); setPage("events") } }) }, (err) => { console.log(err) });
-
-          }
-          } />
-          {/* <button onClick={() => { setPage("register") }}>Register</button> */}
-        </div>}
-        {(page == "register" && !user.token) && <div><h4>Register</h4>
-          <label for="email">Email:</label>
+        }
+        {(page === "register" && !user.token) && <div><h4>Register</h4>
+          <label htmlFor="email">Email:</label>
           <input type="text" id="email" name="email" onChange={(e) => { setEmail(e.target.value) }} />
-          <label for="email">Username:</label>
+          <label htmlFor="email">Username:</label>
           <input type="text" id="username" name="username" onChange={(e) => { setUsername(e.target.value) }} />
-          <label for="pass">Password:</label>
+          <label htmlFor="pass">Password:</label>
           <input type="password" id="pass" name="pass" onChange={(e) => { setPass(e.target.value) }} />
-          <label for="pass">Repeat Password:</label>
+          <label htmlFor="pass">Repeat Password:</label>
           <input type="password" id="rpass" name="rpass" onChange={(e) => { setRPass(e.target.value) }} />
           <h4>{err}</h4>
           <input type="button" value="Submit" onClick={() => {
@@ -126,31 +129,29 @@ function App() {
           }} />
           <button onClick={() => { setPage("login") }}>Login</button>
         </div>}
-        {(user.token && page == "events") && <div>
+        {(user.token && page === "events") && <div>
           <h4> Logged in as {user.email}</h4>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div style={{margin:"auto"}}>
-              <h4>Events</h4>
-              {categories.length && <div>
+          <div className="events-page">
+            <h4 className="page-heading">Events</h4>
+            {categories.length &&
+              <div className="events-list">
                 {getEvents(categories).map((val, idx) => {
-                  return <div style={{display:"flex",alignItems:"center", backgroundColor: val.id == currevent ? "yellow" : "lightgray",margin:"auto" , marginTop:"5px"}} onClick={() => { setcurrevent(val.id); setPage("insideevent"); console.log("eventId", val.id) }}>
-                    <h4>{val.name}</h4>
+                  return <div key={val.name} className="events-list-item" onClick={() => { setcurrevent(val.id); setPage("insideevent"); console.log("eventId", val.id) }}>
+                    {val.name}
                   </div>
                 })}
 
               </div>}
-            </div>
-
           </div>
         </div>}
-        {(user.token && page == "insideevent") && <div >
+        {(user.token && page === "insideevent") && <div >
           <button style={{ marginTop: "15px" }} onClick={() => { setPage("events") }}>Back to events</button>
-          <div style={{ display: "flex", flexDirection: "row" , justifyContent:"center"}}>
-            <div style={{  height: "100vh", overflowY: "scroll" }} ><h4>Registrations</h4>
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "center" }}>
+            <div style={{ height: "100vh", overflowY: "scroll" }} ><h4>Registrations</h4>
               {<h4>Total Registrations:{getTotalreg(userEvents, currevent)} </h4>}
               {userEvents.map((val, idx) => {
-                if (val.event == currevent && val.teamMembers.length)
-                  return (<div style={{ border: "1px solid black", backgroundColor: idx == currUserEventId ? "yellow" : "white" , padding:"5px"}}>
+                if (val.event === currevent && val.teamMembers.length)
+                  return (<div key={val.id} style={{ border: "1px solid black", padding: "5px" }}>
                     <h4> Status</h4>
                     {val.status}
                     <h4>teamMembers</h4>

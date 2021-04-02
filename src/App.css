@@ -37,3 +37,56 @@
     transform: rotate(360deg);
   }
 }
+
+.page-heading {
+  font-size: 2em;
+  margin: 1rem 0;
+}
+
+.login-page {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form > *+* {
+  margin-top: 1rem;
+}
+
+.field {
+  display: flex;
+}
+
+.field > * {
+  flex-grow: 1;
+}
+
+.field > label {
+  flex-grow: 0;
+  flex-basis: 5em;
+}
+
+.events-page {
+  padding: 2em;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  margin-left: -2em;
+  margin-right: -2em;
+}
+
+.events-list-item {
+  padding: 1rem 2rem;
+  font-size: 1.25em;
+  font-weight: normal;
+}
+.events-list > *+* {
+  border-top: solid 1px #ccc;
+}
