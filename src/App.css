@@ -69,7 +69,8 @@ input[type="button"].inverted, input[type="submit"].inverted, button.inverted, .
 
 .page-sub-heading {
   font-size: 1.2em;
-  margin: 1rem 0;
+  margin: 1.2rem 0;
+  line-height: 0.9;
 }
 
 .heading-extra {

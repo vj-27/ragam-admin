@@ -159,12 +159,12 @@ function App() {
           </div>}
         {(user.token && page === "insideevent") &&
           <div className="event-details-page">
-            <div style={{ padding: "0 1rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ padding: "0 1rem", display: "flex", gap: "1em", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <h4 className="page-sub-heading">{getEventName(getEvents(categories), currevent)}</h4>
                 {<div className="heading-extra">Total Registrations: {getTotalreg(userEvents, currevent)} </div>}
               </div>
-                <div>
+                <div style={{flexShrink: 0}}>
                     <button style={{marginRight: "1rem"}} onClick={() => { window.print(); }}>PDF</button>
                     <button onClick={() => { setPage("events") }}>Back to events</button>
                 </div>
