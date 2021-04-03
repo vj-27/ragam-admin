@@ -188,10 +188,10 @@ function App() {
                           {val.teamMembers.map((val1, idx1) => {
                             return (<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap", marginTop: "10px" }}>
                               <div style={{ textDecoration: "underline" }}>{val1.ragamID}</div>
-                              <div >{val1.name}</div>
-                              <div >{val1.collegeName}</div>
-                              <div >{val1.phoneNumber}</div>
-                              <div >{val1.email}</div>
+                              <div>{val1.name}</div>
+                              <div>{val1.collegeName}</div>
+                              <div><a href={"tel:" + val1.phoneNumber}>{val1.phoneNumber}</a></div>
+                              <div><a href={"mailto:" + val1.email}>{val1.email}</a></div>
                             </div>)
                           })}
                         </div>
