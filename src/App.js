@@ -164,7 +164,10 @@ function App() {
                 <h4 className="page-sub-heading">{getEventName(getEvents(categories), currevent)}</h4>
                 {<div className="heading-extra">Total Registrations: {getTotalreg(userEvents, currevent)} </div>}
               </div>
-              <button onClick={() => { setPage("events") }}>Back to events</button>
+                <div>
+                    <button style={{marginRight: "1rem"}} onClick={() => { window.print(); }}>PDF</button>
+                    <button onClick={() => { setPage("events") }}>Back to events</button>
+                </div>
             </div>
             <div className="event-reg-list">
               {userEvents.map((val, idx) => {

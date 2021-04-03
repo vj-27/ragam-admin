@@ -1,3 +1,8 @@
+@page {
+    /* for printing. because individual pages have their own padding */
+    margin: 0;
+}
+
 .App {
   text-align: left;
 }
