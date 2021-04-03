@@ -89,7 +89,7 @@ function App() {
           <div className="heading-extra">{user.email}</div>
         </div>
         {user.token &&
-          <button onClick={() => { localStorage.removeItem("user"); setUser({}); setPage("login") }}>Logout</button>}
+          <button class="inverted" onClick={() => { localStorage.removeItem("user"); setUser({}); setPage("login") }}>Logout</button>}
       </header>
       <div>
         {(page === "login") &&
@@ -184,17 +184,21 @@ function App() {
                       </div>
                       <div class="event-reg-detail">
                         <label className="event-reg-label">Team Members</label>
-                        <div>
                           {val.teamMembers.map((val1, idx1) => {
-                            return (<div style={{ display: "flex", flexDirection: "column", flexWrap: "wrap", marginTop: "10px" }}>
-                              <div style={{ textDecoration: "underline" }}>{val1.ragamID}</div>
-                              <div>{val1.name}</div>
-                              <div>{val1.collegeName}</div>
-                              <div><a href={"tel:" + val1.phoneNumber}>{val1.phoneNumber}</a></div>
-                              <div><a href={"mailto:" + val1.email}>{val1.email}</a></div>
-                            </div>)
+                            return (
+                                <div className="team-member-details" >
+                                <div style={{ textDecoration: "underline" }}>{val1.ragamID}</div>
+                                <div>{val1.name}</div>
+                                <div>{val1.collegeName}</div>
+                                <div>{val1.phoneNumber}</div>
+                                <div>{val1.email}</div>
+                                    <div style={{display: "flex", gap: "0.5em", marginTop: "0.5em"}}>
+                                    <a style={{flexGrow: 1}} class="button" href={"tel:"+val1.phoneNumber}>Call</a>
+                                    <a style={{flexGrow: 1}} class="button" href={"mailto:"+val1.email}>Mail</a>
+                                </div>
+                                </div>
+                            )
                           })}
-                        </div>
                       </div>
                       {val.metaValues &&
                         <div class="event-reg-detail">

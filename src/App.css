@@ -49,6 +49,19 @@
   }
 }
 
+input[type="button"], input[type="submit"], button, .button {
+    padding: 0.5rem 0.7rem;
+    background: #eee;
+    color: black;
+    border: solid 1px #aaa;
+    text-decoration: none;
+    text-align: center;
+}
+
+input[type="button"].inverted, input[type="submit"].inverted, button.inverted, .button.inverted {
+    border: none;
+}
+
 .page-heading {
   font-size: 1.5em;
   margin: 1rem 0;
@@ -133,4 +146,15 @@
   display: flex;
   flex-direction: column;
   padding: .5rem 0;
+}
+
+.team-member-details {
+    padding: 0.5em 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.team-member-details+.team-member-details {
+    margin-top: 0.5em;
+    border-top: solid 1px #ccc;
 }
