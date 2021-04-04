@@ -7,7 +7,7 @@ function getEvents(cats) {
     for (let j in cats[i].events)
       arr.push(cats[i].events[j])
 
-  console.log(arr)
+  arr.sort((a,b) => a.name > b.name);
   return arr;
 }
 
