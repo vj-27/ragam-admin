@@ -157,5 +157,5 @@ input[type="button"].inverted, input[type="submit"].inverted, button.inverted, .
 
 .team-member-details+.team-member-details {
     margin-top: 0.5em;
-    border-top: solid 1px #ccc;
+    border-top: solid 1px #eee;
 }

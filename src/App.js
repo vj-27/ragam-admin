@@ -17,14 +17,18 @@ function getEventName(events, id) {
 
 function getTotalreg(uevents, curevent) {
   let a = 0;
+  let peeps = 0;
   for (let i in uevents) {
-    if (uevents[i].id === "1422")
-      console.log(curevent, uevents[i])
-    if (uevents[i].event === curevent && uevents[i].teamMembers.length)
+    if (uevents[i].event === curevent && uevents[i].teamMembers.length) {
       a = a + 1;
+      peeps += uevents[i].teamMembers.length;
+    }
   }
-  return a;
-
+  if(a == peeps) {
+    return a + "regs. ";
+  } else {
+    return a + " teams. " + peeps + " members.";
+  }
 }
 
 function App() {
@@ -162,7 +166,7 @@ function App() {
               <div style={{ padding: "0 1rem", display: "flex", gap: "1em", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <h4 className="page-sub-heading">{getEventName(getEvents(categories), currevent)}</h4>
-                {<div className="heading-extra">Total Registrations: {getTotalreg(userEvents, currevent)} </div>}
+                {<div className="heading-extra">{getTotalreg(userEvents, currevent)} </div>}
               </div>
                 <div style={{flexShrink: 0}}>
                     <button style={{marginRight: "1rem"}} onClick={() => { window.print(); }}>PDF</button>
